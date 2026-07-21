@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:8.0
+    container_name: ginum-database
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-ginum_apps}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root_password}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-root_password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./ginum-backend-main
+      dockerfile: Dockerfile
+    container_name: ginum-backend
+    restart: always
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_PORT:-8081}:8081"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://database:3306/ginum_apps}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-root_password}
+      DEMO_SEED_TOKEN: ${DEMO_SEED_TOKEN:-change-me-demo-seed-token}
+      SERVER_PORT: ${BACKEND_PORT:-8081}
+
+  frontend:
+    build:
+      context: ./ginum-frontend-main
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:8081}
+    container_name: ginum-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+
+volumes:
+  db_data:

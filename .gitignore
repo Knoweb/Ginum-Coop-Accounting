@@ -1,0 +1,19 @@
+Requirements/
+Sources/
+
+# Ignore local configs and secrets
+.env
+.env.local
+.env.production.backup.local
+node_modules/
+dist/
+build/
+target/
+logs/
+*.log
+*.sql
+*.dump
+*.backup
+*.bak
+.vscode/
+**/vendor/

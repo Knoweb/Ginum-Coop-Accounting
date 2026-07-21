@@ -1,0 +1,6 @@
+.custom-alert {
+    font-size: 14px; /* Adjust font size */
+    background-color: #f8f9fa; /* Light background */
+    border: 1px solid #dee2e6; /* Add border */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+  }
