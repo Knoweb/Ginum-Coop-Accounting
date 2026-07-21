@@ -12,6 +12,7 @@ import Register from "../pages/Register/Register";
 import NotFound from "../pages/NotFound/NotFound";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+import CoopModeGuard from "./CoopModeGuard";
 import MainLayout from "../layout/MainLayout";
 import DashboardPage from "../pages/Dashboard/DashboardPage";
 import AllEmployeesPage from "../components/Employee/AllEmployeePage";
@@ -50,6 +51,7 @@ import AllSales from "../components/customer/AllSales";
 import NewProjectForm from "../components/projects/NewProjectForm";
 import GeneralJournalTransaction from "../components/transactions/GeneralJournalTransaction";
 import AllTransactions from "../components/transactions/AllTranactions";
+import TransactionVoucherPrint from "../components/transactions/TransactionVoucherPrint";
 import AllProjects from "../components/projects/AllProject";
 import BankAccount from "../components/bank/BankAccount";
 import BankReconsilation from "../components/bank/BankReconsilation";
@@ -58,6 +60,7 @@ import AgedReceivables from "../components/customer/AgedReceivables";
 import InventoryDashboard from "../components/Inventory/InventoryDashboard";
 import Depreciation from "../components/depreciation/Depreciation";
 import RequestsPage from "../components/requests/RequestsPage";
+import CoopPostingLogsPage from "../pages/CoopPostings/CoopPostingLogsPage";
 
 function AppRouter() {
   return (
@@ -104,26 +107,28 @@ function AppRouter() {
           <Route path="profile" element={<CompanyProfile />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="employee">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<AllEmployeesPage />} />
-            <Route path="new" element={<AddEmployeeForm />} />
-          </Route>
-          <Route path="supplier">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<SuppliersList />} />
-            <Route path="new" element={<AddSupplierForm />} />
-            <Route path="purchase/new" element={<CreatePurchase />} />
-            <Route path="purchase/all" element={<AllPurchases />} />
-            <Route path="aged-payables" element={<AgedPayables/>} />
-          </Route>
-          <Route path="customer">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<CustomersList />} />
-            <Route path="new" element={<AddCustomerForm />} />
-            <Route path="sales/new" element={<CreateSaleOrder />} />
-            <Route path="sales/all" element={<AllSales />} />
-            <Route path="aged-receivables" element={<AgedReceivables/>} />
+          <Route element={<CoopModeGuard />}>
+            <Route path="employee">
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path="all" element={<AllEmployeesPage />} />
+              <Route path="new" element={<AddEmployeeForm />} />
+            </Route>
+            <Route path="supplier">
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path="all" element={<SuppliersList />} />
+              <Route path="new" element={<AddSupplierForm />} />
+              <Route path="purchase/new" element={<CreatePurchase />} />
+              <Route path="purchase/all" element={<AllPurchases />} />
+              <Route path="aged-payables" element={<AgedPayables/>} />
+            </Route>
+            <Route path="customer">
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path="all" element={<CustomersList />} />
+              <Route path="new" element={<AddCustomerForm />} />
+              <Route path="sales/new" element={<CreateSaleOrder />} />
+              <Route path="sales/all" element={<AllSales />} />
+              <Route path="aged-receivables" element={<AgedReceivables/>} />
+            </Route>
           </Route>
           <Route path="account">
             <Route index element={<Navigate to="all" replace />} />
@@ -140,11 +145,13 @@ function AppRouter() {
               path="receive-money"
               element={<ReceiveMoney />} />
           </Route>
-          <Route path="department">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<DepartmentsList />} />
-            <Route path="new" element={<AddDepartmentForm />} />
-            <Route path="designation" element={<AddDesignationForm />} />
+          <Route element={<CoopModeGuard />}>
+            <Route path="department">
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path="all" element={<DepartmentsList />} />
+              <Route path="new" element={<AddDepartmentForm />} />
+              <Route path="designation" element={<AddDesignationForm />} />
+            </Route>
           </Route>
           <Route path="reports">
             <Route index element={<Navigate to="balance-sheet" replace />} />
@@ -156,32 +163,40 @@ function AppRouter() {
             <Route path="cashflow" element={<Cashflow />} />
             <Route path="general-ledger" element={<GeneralLedger />} />
           </Route>
-          <Route path="quotations">
-            <Route index element={<Navigate to="new" replace />} />
-            <Route path="new" element={<CreateQuotation />} />
-            <Route path="all" element={<AllQuotations />} />
+          <Route element={<CoopModeGuard />}>
+            <Route path="quotations">
+              <Route index element={<Navigate to="new" replace />} />
+              <Route path="new" element={<CreateQuotation />} />
+              <Route path="all" element={<AllQuotations />} />
+            </Route>
           </Route>
           <Route path="users">
             <Route index element={<Navigate to="all" replace />} />
             <Route path="all" element={<AllUsers />} />
             <Route path="new" element={<AddUserForm />} />
           </Route>
-          <Route path="projects">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<AllProjects />} />
-            <Route path="new" element={<NewProjectForm />} />
+          <Route element={<CoopModeGuard />}>
+            <Route path="projects">
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path="all" element={<AllProjects />} />
+              <Route path="new" element={<NewProjectForm />} />
+            </Route>
           </Route>
           <Route path="transactions">
             <Route index element={<Navigate to="all" replace />} />
             <Route path="all" element={<AllTransactions />} />
             <Route path="new" element={<GeneralJournalTransaction />} />
+            <Route path=":id/print" element={<TransactionVoucherPrint />} />
           </Route>
-          <Route path="inventory">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<InventoryDashboard  />} />
+          <Route element={<CoopModeGuard />}>
+            <Route path="inventory">
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path="all" element={<InventoryDashboard  />} />
+            </Route>
           </Route>
           <Route path="depreciation" element={<Depreciation />} />
           <Route path="edit-requests" element={<RequestsPage />} />
+          <Route path="coop-postings" element={<CoopPostingLogsPage />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

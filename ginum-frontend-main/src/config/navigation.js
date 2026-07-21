@@ -16,7 +16,9 @@ import {
 } from "react-icons/fa";
 import { RiContractLeftFill } from "react-icons/ri";
 
-export const navItems = [
+import { isCoopAccountingMode } from "./coopMode";
+
+const allNavItems = [
   {
     sectionTitle: "DASHBOARD",
   },
@@ -160,6 +162,15 @@ export const navItems = [
   //     { id: "new-purchases", path: "/purchases/new", label: "Create Purchase" },
   //   ],
   // },
+  ...(isCoopAccountingMode ? [
+    {
+      id: "coop-postings",
+      path: "/coop-postings",
+      label: "Coop Postings",
+      icon: FaExchangeAlt,
+      subItems: [],
+    }
+  ] : []),
   {
     id: "transactions",
     path: "/transactions",
@@ -289,3 +300,18 @@ export const navItems = [
     subItems: [],
   },
 ];
+
+export const navItems = allNavItems.filter(item => {
+  if (isCoopAccountingMode) {
+    const hiddenIds = [
+      'employee', 'department', 'payroll', 
+      'supplier', 'customer', 'projects', 'inventory', 
+      'sales', 'purchases', 'stock', 'items', 'pos'
+    ];
+    const hiddenSections = ['HUMAN RESOURCES', 'BUSINESS & OPERATIONS'];
+    
+    if (item.id && hiddenIds.includes(item.id)) return false;
+    if (item.sectionTitle && hiddenSections.includes(item.sectionTitle)) return false;
+  }
+  return true;
+});

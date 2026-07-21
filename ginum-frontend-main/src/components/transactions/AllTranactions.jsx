@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiSearch, FiDownload, FiFilter } from "react-icons/fi";
+import { FiSearch, FiDownload, FiFilter, FiPrinter } from "react-icons/fi";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 
@@ -104,6 +104,7 @@ setTransactions(Array.isArray(transactions) ? transactions : []);
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Description</th>
                 <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
                 <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -130,11 +131,20 @@ setTransactions(Array.isArray(transactions) ? transactions : []);
                         {tx.status || 'Completed'}
                       </span>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <button
+                        onClick={() => navigate(`/transactions/${tx.id}/print`, { state: { transaction: tx } })}
+                        className="text-gray-500 hover:text-blue-600 transition"
+                        title="Print Voucher"
+                      >
+                        <FiPrinter size={18} />
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center py-8 text-gray-500">
+                  <td colSpan="6" className="text-center py-8 text-gray-500">
                     No transactions found.
                   </td>
                 </tr>

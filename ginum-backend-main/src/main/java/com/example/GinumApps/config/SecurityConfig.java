@@ -52,7 +52,9 @@ public class SecurityConfig {
                                 "/api/countries",
                                 "/api/countries/**",
                                 "/api/currencies",
-                                "/api/currencies/**"
+                                "/api/currencies/**",
+                                "/api/coop/postings",
+                                "/api/coop/postings/**"
                         ).permitAll()
 
                         // Demo Seeder & Reconcile endpoints
@@ -200,7 +202,7 @@ public class SecurityConfig {
         );
 
         config.setAllowedHeaders(
-                Arrays.asList("Authorization", "Content-Type", "Accept", "X-DEMO-SEED-TOKEN")
+                Arrays.asList("*")
         );
 
         config.setAllowCredentials(true);
